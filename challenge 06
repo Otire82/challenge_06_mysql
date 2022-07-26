@@ -1,0 +1,48 @@
+
+   1/ Retourne le nom des équipes et le nombre de joueurs par équipe, le tout classé par nombre de joueurs par équipe, de la plus nombreuse à la moins nombreuse.
+   mysql> SELECT t.name, COUNT(*) as nb_player_team FROM player p INNER JOIN team t ON t.id=team_id GROUP BY team_id ORDER BY nb_player_team DESC;
++------------+----------------+
+| name       | nb_player_team |
++------------+----------------+
+| Gryffindor |             36 |
+| Slytherin  |             21 |
+| Ravenclaw  |             15 |
+| Hufflepuff |             12 |
++------------+----------------+
+4 rows in set (0.00 sec)
+   ________________________________________________________________________________________________________________________________________________________
+   2/ Retourne uniquement les noms des équipes complètes (ayant 14 joueurs ou plus, c’est-à- dire 7 joueurs et 7 remplaçants minimum), classés par ordre alphabétique.
+ mysql> SELECT t.name, COUNT(*) as nb_player_team FROM player p INNER JOIN team t ON t.id=team_id GROUP BY team_id HAVING nb_player_team > 14 ORDER BY t.name ASC;
++------------+----------------+
+| name       | nb_player_team |
++------------+----------------+
+| Gryffindor |             36 |
+| Ravenclaw  |             15 |
+| Slytherin  |             21 |
++------------+----------------+
+3 rows in set (0.00 sec)  
+  
+   ___________________________________________________________________________________________________________________________________________________________
+   3/ L’entraîneur des Gryffindor est superstitieux, son jour préféré est le lundi. Retourne la liste des joueurs de son équipe qui ont été enrôlés un lundi (il souhaite les faire jouer en priorité), et classe les résultats par date d’enrôlement chronologique.
+mysql> SELECT w.firstname, w.lastname, DAYNAME(enrollment_date) AS player_day, enrollment_date FROM player
+    -> JOIN wizard w ON w.id=wizard_id
+    -> HAVING player_day='Monday'
+    -> ORDER BY enrollment_date ASC;
++-------------+------------+------------+-----------------+
+| firstname   | lastname   | player_day | enrollment_date |
++-------------+------------+------------+-----------------+
+| Xenophilius | Lovegood   | Monday     | 1991-03-11      |
+| Blaise      | Zabini     | Monday     | 1991-07-08      |
+| George      | Weasley    | Monday     | 1991-08-26      |
+| Cho         | Chang      | Monday     | 1992-01-27      |
+| Alice       | Longbottom | Monday     | 1992-02-17      |
+| Cadogan     |            | Monday     | 1993-01-04      |
+| Godric      | Gryffindor | Monday     | 1993-08-30      |
+| Sirius      | Black      | Monday     | 1994-01-10      |
+| Aberforth   | Dumbledore | Monday     | 1995-04-24      |
+| Hannah      | Abbott     | Monday     | 1995-10-09      |
+| Theodore    | Nott       | Monday     | 1996-12-02      |
+| Marcus      | Flint      | Monday     | 1996-12-16      |
+| Augusta     | Longbottom | Monday     | 1999-10-25      |
++-------------+------------+------------+-----------------+
+13 rows in set (0.00 sec)
